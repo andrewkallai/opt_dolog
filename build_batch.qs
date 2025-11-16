@@ -184,4 +184,6 @@
 
 #
 
-srun general_clang_lld_build.sh
+#srun general_clang_lld_libcxx_build.sh
+#srun fuchsia_setup.sh
+srun mlgo_llvm_build.sh
