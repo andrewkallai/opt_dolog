@@ -11,11 +11,13 @@ export PATH="${BINUTILS_PATH}/bin:${GCC_INSTALL}/bin:$LLVM_FIRST_INSTALLDIR/bin:
 set +u
 export LD_LIBRARY_PATH="${BINUTILS_PATH}/lib:${GCC_INSTALL}/lib/gcc/x86_64-pc-linux-gnu/15.2.0:${GCC_INSTALL}/lib64:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="$LLVM_FIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LD_LIBRARY_PATH"
+export LIBRARY_PATH="${GCC_INSTALL}/lib/gcc/x86_64-pc-linux-gnu/15.2.0:${GCC_INSTALL}/lib64:$LIBRARY_PATH"
 export LIBRARY_PATH="$LLVM_DIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LIBRARY_PATH"
 set -u
 export CC=clang
 export CXX=clang++
-#export CXXFLAGS="-stdlib=libc++"
+export CXXFLAGS="-stdlib=libc++" #-lc++abi"
+export LDFLAGS="-stdlib=libc++"
 
 cd $HOME/ml-compiler-opt
 

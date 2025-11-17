@@ -4,37 +4,48 @@
 set -x
 set -e
 
+export IDK_DIR=$HOME/sw/fuchsia-idk
+export SYSROOT_DIR=$HOME/sw/fuchsia-sysroot
+export FUCHSIA_SRCDIR=$HOME/sw/fuchsia
+set +u
+source $FUCHSIA_SRCDIR/scripts/fx-env.sh && fx-update-path
+set -u
+
 source $HOME/opt_dolog/tensorflow_setup_env/bin/activate
 PREFIX=$HOME/sw
+GCC_INSTALL="${HOME}/sw/gcc/gcc-install-15.2.0-20251116"
+BINUTILS_PATH=${HOME}/sw/Binutils/binutils-2.45_install
+LLVM_FIRST_INSTALLDIR=$HOME/LLVM_installs/llvm-clang-lld-libcxx-install
 export PATH="$PREFIX/CCache/ccache-4.12.1-linux-x86_64:$PREFIX/Ninja/bin:$PREFIX/CMake/cmake-4.1.2-linux-x86_64/bin:$PATH"
+export PATH="${BINUTILS_PATH}/bin:${GCC_INSTALL}/bin:$LLVM_FIRST_INSTALLDIR/bin:$PATH"
 
 #module load llvm/18.1.8 
 #module load gcc/13.2
-export LLVM_FIRST_INSTALLDIR=~/LLVM_installs/llvm-clang-lld-libcxx-install
 export PATH="$LLVM_FIRST_INSTALLDIR/bin:$PATH"
 set +u
 #export LD_LIBRARY_PATH="/packages/gcc/13.2.0/lib64:$LLVM_FIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LD_LIBRARY_PATH"
 #export LIBRARY_PATH="/packages/gcc/13.2.0/lib64:$LLVM_DIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LIBRARY_PATH"
+export LD_LIBRARY_PATH="${BINUTILS_PATH}/lib:${GCC_INSTALL}/lib/gcc/x86_64-pc-linux-gnu/15.2.0:${GCC_INSTALL}/lib64:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="$LLVM_FIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LD_LIBRARY_PATH"
+export LIBRARY_PATH="${GCC_INSTALL}/lib/gcc/x86_64-pc-linux-gnu/15.2.0:${GCC_INSTALL}/lib64:$LIBRARY_PATH"
 export LIBRARY_PATH="$LLVM_DIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LIBRARY_PATH"
 set -u
 
 export LLVM_SRCDIR=$HOME/LLVM_clones/llvm-project
 export LLVM_INSTALLDIR=$HOME/LLVM_installs/llvm-mlgo-install
 BUILD=$HOME/LLVM_builds/llvm_for_mlgo_build
-export IDK_DIR=~/sw/fuchsia-idk
-export SYSROOT_DIR=~/sw/fuchsia-sysroot
-export FUCHSIA_SRCDIR=~/sw/fuchsia
 export TFLITE_PATH=~/tflite
 
 export PATH=$FUCHSIA_SRCDIR/.jiri_root/bin:$PATH
-set +u
-source $FUCHSIA_SRCDIR/scripts/fx-env.sh
-set -u
-
 #LLVM_PROJECTS="clang;lld"
 #LLVM_RUNTIMES="compiler-rt"
 #TARGETS="X86"
+export CXXFLAGS="-L/home/users/andrewka/LLVM_installs/llvm-clang-lld-libcxx-install/lib/x86_64-unknown-linux-gnu -lc++abi.a"
+#export CXXFLAGS="-llibc++abi.a"
+
+#export LDFLAGS="-stdlib=libc++"
+
+
 
 mkdir -p $LLVM_INSTALLDIR
 mkdir -p $BUILD
@@ -78,6 +89,7 @@ cd $BUILD
 ./bin/llvm-lit -v test
 
 cd ${FUCHSIA_SRCDIR}
+echo $LD_LIBRARY_PATH
 fx set core.x64 \
   --args='clang_prefix="/home/users/andrewka/LLVM_installs/llvm-mlgo-install/bin"' \
   --args=clang_embed_bitcode=true \
