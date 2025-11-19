@@ -23,7 +23,7 @@ SRC=$HOME/LLVM_clones
 INSTALL=$HOME/LLVM_installs/llvm-clang-lld-libcxx-install
 BUILD=$HOME/LLVM_builds/llvm_for_clang-lld-libcxx_build
 
-LLVM_PROJECTS="clang;lld"
+LLVM_PROJECTS="clang;lld;llvm"
 #;lldb"
 LLVM_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind"
 TARGETS="X86"
@@ -46,7 +46,16 @@ cmake -D CMAKE_BUILD_TYPE=Release \
   -D LLVM_TARGETS_TO_BUILD=${TARGETS} \
   -D LLVM_RUNTIME_TARGETS="default;" \
   -D LLVM_APPEND_VC_REV=ON \
+  -D LIBCXX_ENABLE_STATIC=ON \
+  -D LIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
+  -D LIBCXX_ABI_VERSION=2 \
+  -D LIBCXXABI_ENABLE_STATIC=ON \
+  -D LIBUNWIND_ENABLE_STATIC=ON \
   -G Ninja ${SRC}/llvm-project/llvm
+
+  #-D LIBCXX_ENABLE_SHARED=OFF \
+  #-D LIBCXXABI_ENABLE_SHARED=OFF \
+  #-D LIBUNWIND_ENABLE_SHARED=OFF \
 
 cmake --build . --target install
 

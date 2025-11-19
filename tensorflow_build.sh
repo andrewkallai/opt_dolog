@@ -17,7 +17,7 @@ set -u
 export CC=clang
 export CXX=clang++
 export CXXFLAGS="-stdlib=libc++" #-lc++abi"
-export LDFLAGS="-stdlib=libc++"
+#export LDFLAGS="-stdlib=libc++"
 
 cd $HOME/ml-compiler-opt
 

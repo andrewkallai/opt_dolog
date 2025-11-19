@@ -27,9 +27,12 @@ set +u
 #export LIBRARY_PATH="/packages/gcc/13.2.0/lib64:$LLVM_DIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LIBRARY_PATH"
 export LD_LIBRARY_PATH="${BINUTILS_PATH}/lib:${GCC_INSTALL}/lib/gcc/x86_64-pc-linux-gnu/15.2.0:${GCC_INSTALL}/lib64:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH="$LLVM_FIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH="$HOME/sw/Zlib/zlib-1.3.1_install/lib:$HOME/sw/Zstd/zstd-1.5.7/lib:$HOME/sw/LibXML/libxml2-2.9.14_install/lib:$LD_LIBRARY_PATH"
 export LIBRARY_PATH="${GCC_INSTALL}/lib/gcc/x86_64-pc-linux-gnu/15.2.0:${GCC_INSTALL}/lib64:$LIBRARY_PATH"
-export LIBRARY_PATH="$LLVM_DIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LIBRARY_PATH"
+export LIBRARY_PATH="$LLVM_FIRST_INSTALLDIR/lib/x86_64-unknown-linux-gnu:$LLVM_FIRST_INSTALLDIR/lib:$LIBRARY_PATH"
+export LIBRARY_PATH="$HOME/sw/Zlib/zlib-1.3.1_install/lib:$HOME/sw/Zstd/zstd-1.5.7/lib:$HOME/sw/LibXML/libxml2-2.9.14_install/lib:$LIBRARY_PATH"
 set -u
+export PATH="$HOME/sw/Zlib/zlib-1.3.1_install/lib:$HOME/sw/Zstd/zstd-1.5.7/lib:$HOME/sw/LibXML/libxml2-2.9.14_install/lib:$PATH"
 
 export LLVM_SRCDIR=$HOME/LLVM_clones/llvm-project
 export LLVM_INSTALLDIR=$HOME/LLVM_installs/llvm-mlgo-install
@@ -37,11 +40,16 @@ BUILD=$HOME/LLVM_builds/llvm_for_mlgo_build
 export TFLITE_PATH=~/tflite
 
 export PATH=$FUCHSIA_SRCDIR/.jiri_root/bin:$PATH
+#export CMAKE_INCLUDE_PATH="${LLVM_FIRST_INSTALLDIR}/include/c++/v1"
+
+#export CLANG_TOOLCHAIN_PREFIX=${FUCHSIA_DIR}/prebuilt/third_party/clang/linux-x64/bin/
+
 #LLVM_PROJECTS="clang;lld"
 #LLVM_RUNTIMES="compiler-rt"
 #TARGETS="X86"
-export CXXFLAGS="-L/home/users/andrewka/LLVM_installs/llvm-clang-lld-libcxx-install/lib/x86_64-unknown-linux-gnu -lc++abi.a"
-#export CXXFLAGS="-llibc++abi.a"
+#export CXXFLAGS="-L/home/users/andrewka/LLVM_installs/llvm-clang-lld-libcxx-install/lib/x86_64-unknown-linux-gnu -lc++abi.a"
+#export CXXFLAGS="-L/home/users/andrewka/LLVM_installs/llvm-clang-lld-libcxx-install/lib/x86_64-unknown-linux-gnu -lc++abi"
+#export CXXFLAGS="-lc++abi"
 
 #export LDFLAGS="-stdlib=libc++"
 
@@ -63,6 +71,10 @@ cmake -D CMAKE_BUILD_TYPE=Release \
   -C ${TFLITE_PATH}/tflite.cmake \
   -G Ninja ${LLVM_SRCDIR}/llvm
 
+  #-D CMAKE_TOOLCHAIN_FILE=${FUCHSIA_DIR}/scripts/clang/ToolChain.cmake \
+  #-D LINUX_x86_64-unknown-linux-gnu_SYSROOT=${SYSROOT_DIR}/linux-x64/lib/x86_64-linux-gnu \
+  #-D LINUX_x86_64-unknown-linux-gnu_SYSROOT=${SYSROOT_DIR}/linux-x64/usr/include/x86_64-linux-gnu \
+  #-D BUILD_SHARED_LIBS=OFF \
   # -D LLVM_ENABLE_LLD=ON \
   # -D LLVM_ENABLE_PROJECTS=${LLVM_PROJECTS} \
   # -D LLVM_ENABLE_ASSERTIONS=ON \
@@ -75,9 +87,11 @@ cmake -D CMAKE_BUILD_TYPE=Release \
   # -D LLVM_APPEND_VC_REV=ON \
 
 #cmake --build . --target install
+cmake --build . --target toolchain-distribution
 
 
-ninja toolchain-distribution
+
+#ninja toolchain-distribution
 DESTDIR=${LLVM_INSTALLDIR} ninja install-toolchain-distribution-stripped
 cd ${FUCHSIA_SRCDIR}
 python scripts/clang/generate_runtimes.py \
