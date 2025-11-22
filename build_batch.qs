@@ -20,7 +20,7 @@
 # [EDIT] Indicate the number of processor cores/threads to be used
 #        by the job:
 #
-#SBATCH --cpus-per-task=84
+#SBATCH --cpus-per-task=64
 #
 # [EDIT] All jobs have memory limits imposed.  The default is 1 GB per
 #        CPU allocated to the job.  The default can be overridden either
@@ -56,7 +56,10 @@
 #        PLEASE NOTE:  On DARWIN every job is **required** to include the
 #                      --partition flag in its submission!
 #
-#SBATCH --partition=gilgamesh
+# SBATCH --partition=gilgamesh
+#SBATCH --partition=lizard
+#SBATCH --nodelist=voltar
+#
 # [EDIT] Jobs that will run in one of the GPU partitions can request GPU
 #        resources using ONE of the following flags:
 #
@@ -186,6 +189,6 @@
 
 #srun general_clang_lld_libcxx_build.sh
 #srun fuchsia_setup.sh
-#srun mlgo_llvm_build.sh
+srun mlgo_llvm_build.sh
 #srun gcc_build.sh
-srun other_fuchsia_setup.sh
+#srun other_fuchsia_setup.sh
