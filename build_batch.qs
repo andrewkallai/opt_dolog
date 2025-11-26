@@ -189,6 +189,7 @@
 
 #srun general_clang_lld_libcxx_build.sh
 #srun fuchsia_setup.sh
-srun mlgo_llvm_build.sh
+#srun mlgo_llvm_build.sh
 #srun gcc_build.sh
 #srun other_fuchsia_setup.sh
+srun train_model.sh
