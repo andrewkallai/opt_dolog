@@ -192,4 +192,6 @@
 #srun mlgo_llvm_build.sh
 #srun gcc_build.sh
 #srun other_fuchsia_setup.sh
-srun train_model.sh
+#srun train_model.sh
+srun release_mode_model_build.sh
+

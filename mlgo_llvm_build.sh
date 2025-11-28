@@ -77,9 +77,9 @@ cd ${LLVM_BUILD_DIR}  # The directory your toolchain will be installed in
 
 # Generate runtime.json
 
-python3 ${FUCHSIA_DIR}/scripts/clang/generate_runtimes.py    \
-  --clang-prefix ${INSTALL_DIR} --sdk-dir ${IDK_DIR}            \
-  --build-id-dir ${INSTALL_DIR}/lib/.build-id > ${INSTALL_DIR}/lib/runtime.json
+# python3 ${FUCHSIA_DIR}/scripts/clang/generate_runtimes.py    \
+#   --clang-prefix ${INSTALL_DIR} --sdk-dir ${IDK_DIR}            \
+#   --build-id-dir ${INSTALL_DIR}/lib/.build-id > ${INSTALL_DIR}/lib/runtime.json
 
 set +u
 source ${FUCHSIA_DIR}/scripts/fx-env.sh && fx-update-path
@@ -95,3 +95,4 @@ fx set core.x64 \
   --args='optimize="size"' \
   --args='clang_ml_inliner=false'
 fx build
+
