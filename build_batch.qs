@@ -56,9 +56,9 @@
 #        PLEASE NOTE:  On DARWIN every job is **required** to include the
 #                      --partition flag in its submission!
 #
-# SBATCH --partition=gilgamesh
-#SBATCH --partition=lizard
-#SBATCH --nodelist=voltar
+#SBATCH --partition=gilgamesh
+# SBATCH --partition=lizard
+# SBATCH --nodelist=voltar
 #
 # [EDIT] Jobs that will run in one of the GPU partitions can request GPU
 #        resources using ONE of the following flags:
@@ -192,6 +192,6 @@
 #srun mlgo_llvm_build.sh
 #srun gcc_build.sh
 #srun other_fuchsia_setup.sh
-#srun train_model.sh
-srun release_mode_model_build.sh
+srun train_model.sh
+#srun release_mode_model_build.sh
 
