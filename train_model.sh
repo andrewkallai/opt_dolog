@@ -82,17 +82,31 @@ export OUTPUT_DIR=$PREFIX/model
 
 
 # rm -rf $OUTPUT_DIR && \
-PYTHONPATH=$PYTHONPATH:. python3 \
-  compiler_opt/rl/train_locally.py \
-  --root_dir=$OUTPUT_DIR \
-  --data_path=$CORPUS \
-  --gin_bindings=clang_path="'$INSTALL_DIR/bin/clang'" \
-  --gin_bindings=llvm_size_path="'$INSTALL_DIR/bin/llvm-size'" \
-  --gin_files=compiler_opt/rl/inlining/gin_configs/rf_agent.gin #\
+# PYTHONPATH=$PYTHONPATH:. python3 \
+#   compiler_opt/rl/train_locally.py \
+#   --root_dir=$OUTPUT_DIR \
+#   --data_path=$CORPUS \
+#   --gin_bindings=clang_path="'$INSTALL_DIR/bin/clang'" \
+#   --gin_bindings=llvm_size_path="'$INSTALL_DIR/bin/llvm-size'" \
+#   --gin_files=compiler_opt/rl/inlining/gin_configs/rf_agent.gin #\
 #  --gin_bindings=train_eval.warmstart_policy_dir=\"$WARMSTART_OUTPUT_DIR/saved_policy\"
 
 #  --gin_files=compiler_opt/rl/inlining/gin_configs/ppo_nn_agent.gin #\
-set -u
 
 # monitor separately
 #tensorboard --logdir=$OUTPUT_DIR
+
+export OUTPUT_PERFORMANCE_PATH=$PREFIX/opt_dolog/performance_report/rf_perf_report.txt && \
+PYTHONPATH=$PYTHONPATH:. python3 \
+compiler_opt/tools/generate_default_trace.py \
+  --data_path=$CORPUS \
+  --policy_path=$PREFIX/model/saved_policy \
+  --output_performance_path=$OUTPUT_PERFORMANCE_PATH \
+  --gin_files=compiler_opt/rl/inlining/gin_configs/common.gin \
+  --gin_bindings=clang_path="'$INSTALL_DIR/bin/clang'" \
+  --gin_bindings=llvm_size_path="'$INSTALL_DIR/bin/llvm-size'" \
+  --sampling_rate=0.2
+
+set -u
+
+#  --policy_path=$OUTPUT_DIR/saved_policy \

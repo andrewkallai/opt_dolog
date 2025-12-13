@@ -91,7 +91,7 @@
 #        Jobs default to the default runtime limit of the chosen partition
 #        if this option is omitted.
 #
-#SBATCH --time=0-08:00:00
+#SBATCH --time=0-14:00:00
 #
 #        You can also provide a minimum acceptable runtime so the scheduler
 #        may be able to run your job sooner.  If you do not provide a
